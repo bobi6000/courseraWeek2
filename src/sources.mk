@@ -10,8 +10,34 @@
 #*****************************************************************************
 
 # Add your Source files to this variable
-SOURCES =
+SRC_COMM = 				\
+	./main.c 			\
+	./memory.c			
+
+SRC_MSP =				\
+	./interrupts_msp432p401r_gcc.c	\
+	./startup_msp432p401r_gcc.c	\
+	./system_msp432p401r.c
 
 # Add your include paths to this variable
-INCLUDES = 
 
+INCLUD_COMM =   ../include/common
+INCLUD_MSP =    ../include/msp432
+INCLUD_ARM =    ../include/CMSIS
+	
+ifeq ($(PLATFORM),HOST) 
+	SOURCES = $(SRC_COMM)
+	INCLUDES = -I$(INCLUD_COMM) 
+
+else ifeq ($(PLATFORM),MSP432)
+
+SOURCES = $(SRC_COMM)		\
+	  $(SRC_MSP)
+
+INCLUDES = -I$(INCLUD_COMM)	\
+	   -I$(INCLUD_MSP)	\
+	   -I$(INCLUD_ARM)
+endif
+
+echo: $(SOURCES)
+echo: $(INCLUDES)
